@@ -2,7 +2,17 @@ hr {
    margin: 0;
 }
 
-.nav {
-    color: red;
-    background-color: green;
+nav {
+    background-color: #282c34;
+    display: flex;
+    justify-content: space-evenly;
+    height: 6rem;
+    align-items: center;
+    font-size: 2vw;
+    color: white;
+
+    a{
+        text-decoration: none;
+        color: white;
+    }
 }

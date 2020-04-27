@@ -1,30 +1,29 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import styles from './MyRouter.module.scss';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  //useLocation
 } from "react-router-dom";
 import MbApi from '../MbApi/MbApi';
 import Home from '../Home/Home';
 import OtonomoApi from '../OtonomoApi/OtonomoApi'
 
+/* function isActive( pathname){
+  return (useLocation().pathname === pathname);
+} */
+
 const MyRouter = () => (
   <Router>
-  <div className="nav">
-    <ul>
-      <li>
+  <div className={styles.nav}>
+    <nav>
         <Link to="/">Home</Link>
-      </li>
-     <li>
-        <Link to="/mb-api">Mercedes-Benz API</Link>
-      </li>
-      <li>
         <Link to="/otonomo-api">Otonomo</Link>
-      </li>
-    </ul>
+        <Link to="/mb-api">Mercedes-Benz API</Link>
+    </nav>
 
     <hr />
 
@@ -36,7 +35,7 @@ const MyRouter = () => (
       of them to render at a time
     */}
     <Switch>
-      <Route exact path="/">
+      <Route exact path="/" >
         <Home />
       </Route>
       <Route exact path="/mb-api">
