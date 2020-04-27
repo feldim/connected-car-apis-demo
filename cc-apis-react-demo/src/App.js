@@ -1,12 +1,12 @@
 import React from 'react';
-import './App.css';
+import './App.scss';
 
-import Nav from './components/MyRouter/MyRouter';
+import MyRouter from './components/MyRouter/MyRouter';
 
 function App() {
   return (
     <div className="App">
-       <Nav />
+       <MyRouter />
     </div>
   );
 }

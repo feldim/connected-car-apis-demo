@@ -1,6 +1,6 @@
 import React from 'react';
-/* import PropTypes from 'prop-types';
-import styles from './Nav.module.scss'; */
+import PropTypes from 'prop-types';
+import styles from './MyRouter.module.scss';
 import {
   BrowserRouter as Router,
   Switch,
@@ -9,21 +9,21 @@ import {
 } from "react-router-dom";
 import MbApi from '../MbApi/MbApi';
 import Home from '../Home/Home';
+import OtonomoApi from '../OtonomoApi/OtonomoApi'
 
-
-const Nav = () => (
+const MyRouter = () => (
   <Router>
-  <div>
+  <div className="nav">
     <ul>
       <li>
         <Link to="/">Home</Link>
       </li>
-{      <li>
+     <li>
         <Link to="/mb-api">Mercedes-Benz API</Link>
-      </li>/* 
+      </li>
       <li>
-        <Link to="/dashboard">Dashboard</Link>
-      </li> */}
+        <Link to="/otonomo-api">Otonomo</Link>
+      </li>
     </ul>
 
     <hr />
@@ -42,13 +42,16 @@ const Nav = () => (
       <Route exact path="/mb-api">
         <MbApi />
       </Route>
+      <Route exact path="/otonomo-api">
+        <OtonomoApi />
+      </Route>
     </Switch>
   </div>
 </Router>
 );
 
-Nav.propTypes = {};
+MyRouter.propTypes = {};
 
-Nav.defaultProps = {};
+MyRouter.defaultProps = {};
 
-export default Nav;
+export default MyRouter;
