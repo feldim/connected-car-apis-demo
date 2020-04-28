@@ -15,9 +15,9 @@ router.get('/obtaining-driver-consent', function(req, res) {
 
     // This is the client ID and client secret that you obtained
     // while registering the application
-    const clientID = 'Y1RwUGjpMhlP2gNYGiWXcdC5C9XQjisF'
+    const clientID = process.env.clientID
     const autorize_url = 'https://consent.eu.otonomo.io/v1/oauth/authorize'
-    const service = 'FelDim-demo-2'
+    const service = process.env.service
     const redirect_uri = 'https://otonomo.io' //'http://localhost:3000/otonomo-api'
 
     var url = `${autorize_url}?response_type=code&app=${service}&client_id=${clientID}&redirect_uri=${redirect_uri}&response_type=code`;
@@ -52,10 +52,10 @@ router.get('/obtaining-driver-consent', function(req, res) {
 router.get('obtaining-driver-consent/oauth/redirect', function(req, res) {
     // This is the client ID and client secret that you obtained
     // while registering the application
-    const clientID = 'Y1RwUGjpMhlP2gNYGiWXcdC5C9XQjisF'
-    const clientSecret = 'ecmZhTKmwrBNm0umXlc8K2ZZaZOd0l8a7ZdN68p-kx2jCQtkxgQOV8QdDDKfA4ue'
+    const clientID = process.env.clientID
+    const clientSecret = process.env.clientSecret
     const token_url = 'https://api.otonomo.io/v1/oauth/token'
-    const service = 'FelDim-demo-2'
+    const service = process.env.service
     const redirect_uri = 'https://otonomo.io/callback' //'http://localhost:3000/otonomo-api'
     const code = "  " //this should come from /obtaining-driver-consent
 
@@ -92,7 +92,7 @@ router.get('obtaining-driver-consent/oauth/redirect', function(req, res) {
   router.get('/personal-data', function(req, res) {
 
     // this should normally come from /obtaining-driver-consent/oauth/redirect
-    const bearer = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJodHRwczovL290b25vbW8uaW8vY29uc3VtZXJfbmFtZSI6ImZlbGRpbSIsImh0dHBzOi8vb3Rvbm9tby5pby9hcHBfbmFtZSI6ImZlbGRpbS1kZW1vLTIiLCJodHRwczovL290b25vbW8uaW8vYXBwX2lkIjo3ODkyMSwiaHR0cHM6Ly9vdG9ub21vLmlvL3Byb3ZpZGVyX2lkIjoxLCJodHRwczovL290b25vbW8uaW8vdG9rZW5fdHlwZSI6ImRyaXZlciIsImh0dHBzOi8vb3Rvbm9tby5pby9jYXJfaWQiOiIwVE5NWjlLTjE4VVVDQzc4NyIsImh0dHBzOi8vb3Rvbm9tby5pby9jYXJfaWRfdHlwZSI6InZpbiIsInN1YiI6IjBUTk1aOUtOMThVVUNDNzg3IiwiaXNzIjoiaHR0cHM6Ly9jb25zZW50Lm90b25vbW8uaW8iLCJhdWQiOlsiaHR0cHM6Ly9hcGkub3Rvbm9tby5pbyIsImh0dHBzOi8vY29uc2VudC5vdG9ub21vLmlvIl0sImF6cCI6ImNsaWVudF9pZF90aGF0X2RvZXNudF9tYXR0ZXJzIiwiaWF0IjoxNTg4MDgxODcxLCJleHAiOjE1ODgwODU0NzF9.i9cDUK-MYrJDripJBiYUmKy-XmoueeEO15vDLzFxcQQIPPQlSbcYwlBrUtiLk_yk1VqLVbiXmmXNWctRl0vTEi_oA18WDemkDMxZqF5vJfzqtgXDI6Wv__jGvaLUIBU_FOWww8a3Qw5ylRhB7wop1HZ_huK-hqiYcvIVxz3BHCKiOin3eNtZ1OphCSBVAMk5mBPnlpYhkUFTDlyCFpvIOMTF290Y58fqUxUmV7vV3XwYB6uAVZvOUdLVkmKBpAWsAmgjOe8128IGJWRgr4CY4ub0762OGRWEn5aNH5KIRD8JuOXJyE610SzZ3Ntp0edC4g2KV9oJ6Zo8TchRLDxx0w'
+    const bearer = process.env.bearer
     const url = 'https://market.otonomo.io/cars/v1/status/'
 
     var options = {

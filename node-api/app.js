@@ -8,7 +8,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 otonomoApi = require("./routes/otonomo-api");
 var app = express();
-
+env = require('dotenv').config()
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
