@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 // Import the axios library, to make HTTP requests
 const axios = require('axios')
-var request = require("request");
+var request = require("request-promise");
 
 
 
@@ -15,9 +15,9 @@ router.get('/obtaining-driver-consent', function(req, res) {
 
     // This is the client ID and client secret that you obtained
     // while registering the application
-    const clientID = process.env.clientID
+    const clientID = process.env.otonomoClientID
     const autorize_url = 'https://consent.eu.otonomo.io/v1/oauth/authorize'
-    const service = process.env.service
+    const service = process.env.otonomoService
     const redirect_uri = 'https://otonomo.io' //'http://localhost:3000/otonomo-api'
 
     var url = `${autorize_url}?response_type=code&app=${service}&client_id=${clientID}&redirect_uri=${redirect_uri}&response_type=code`;
@@ -46,16 +46,16 @@ router.get('/obtaining-driver-consent', function(req, res) {
 
       res.send(accessToken)
     })
-  });
+});
 
   
 router.get('obtaining-driver-consent/oauth/redirect', function(req, res) {
     // This is the client ID and client secret that you obtained
     // while registering the application
-    const clientID = process.env.clientID
-    const clientSecret = process.env.clientSecret
+    const clientID = process.env.otonomoClientID
+    const clientSecret = process.env.otonomoClientSecret
     const token_url = 'https://api.otonomo.io/v1/oauth/token'
-    const service = process.env.service
+    const service = process.env.otonomoService
     const redirect_uri = 'https://otonomo.io/callback' //'http://localhost:3000/otonomo-api'
     const code = "  " //this should come from /obtaining-driver-consent
 
@@ -86,13 +86,13 @@ router.get('obtaining-driver-consent/oauth/redirect', function(req, res) {
 
       res.send(accessToken)
     })
-  });
+});
 
 
-  router.get('/personal-data', function(req, res) {
+router.get('/personal-data', function(req, res) {
 
     // this should normally come from /obtaining-driver-consent/oauth/redirect
-    const bearer = process.env.bearer
+    const bearer = process.env.otonomoBearer
     const url = 'https://market.otonomo.io/cars/v1/status/'
 
     var options = {
@@ -110,7 +110,7 @@ router.get('obtaining-driver-consent/oauth/redirect', function(req, res) {
     });
 
 
-  });
+});
 
 
 module.exports=router;

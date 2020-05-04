@@ -32,21 +32,14 @@ class OtonomoApi extends React.Component{
   render(){
     return (
       <div className={styles.OtonomoApi} data-testid="OtonomoApi">
-      OtonomoApi Component
-      <p>General Test:<br />{this.state.apiResponse}</p>
-      <p>Personal Data Test: <br />{this.state.simulationData.replace(/,/g,'\n,')}</p>
+        OtonomoApi Component
+        <p>General Test:<br />{this.state.apiResponse}</p>
+        <p>Personal Data Test: <br />{this.state.simulationData.replace(/,/g,'\n,')}</p>
     </div>
     );
   }
 
 }
-
-
-
-
-
-
-
 
 OtonomoApi.propTypes = {};
 
