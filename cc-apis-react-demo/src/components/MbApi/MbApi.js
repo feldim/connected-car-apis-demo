@@ -5,7 +5,7 @@ import styles from './MbApi.module.scss';
 class MbApi extends React.Component{
   constructor(props){
     super(props);
-    this.state={apiResponse:"", simulationData:""}; //set response with empty value
+    this.state={apiResponse:"", dataVehicle:"", dataVin:""}; //set response with empty value
 
   }
 
@@ -35,7 +35,9 @@ class MbApi extends React.Component{
 
     if(auth){
       console.log("already authenticated");
-      if(queryString) window.location.href = window.location.href.split('?')[0];
+      urlParams.delete('code');
+      urlParams.delete('state')
+
       this.callVehicleData()
 
     }else if(urlParams.has('code')){
@@ -69,9 +71,41 @@ class MbApi extends React.Component{
 
   async callVehicleData(){
     console.log("MB: call vehicle data")
-    await fetch("http://localhost:9000/mb-api/connected-vehicle-data")
-      .then(res => res.text())
-      .then(res => this.setState({simulationData: res}));
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    if(!urlParams.has('id')){
+      await fetch("http://localhost:9000/mb-api/connected-vehicle-data")
+        .then(res => res.text())
+        .then(res => {
+
+          const body = JSON.parse(res);
+          this.setState({dataVehicle: res})
+
+          window.location.href = window.location.href + "?id="+body[0].id
+
+      });
+    }else{
+      this.callVehicleVinData();
+    }
+
+  }
+
+  async callVehicleVinData(){
+    console.log("MB: call vehicle vin data")
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+
+      await fetch("http://localhost:9000/mb-api/connected-vehicle-data/vehicles?id="+urlParams.get('id'))
+        .then(res => res.text())
+        .then(res => {
+
+          this.setState({dataVin: res})
+
+      });
 
   }
 
@@ -85,8 +119,9 @@ class MbApi extends React.Component{
     return (
     <div className={styles.MbApi} data-testid="MbApi">
       MbApi Component
-      <p>General Test:<br />{this.state.apiResponse}</p>
-      <p>Connected Vehicle API Test: <br />{this.state.simulationData.replace(/,/g,'\n,')}</p>
+      <p>General Node Test:<br />{this.state.apiResponse}</p>
+      <p>Connected Vehicle API: <br />{this.state.dataVehicle}</p>
+      <p>Connected Vehicle API VIN data: <br />{this.state.dataVin}</p>
     </div>
   );
     }

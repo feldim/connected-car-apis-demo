@@ -39,7 +39,7 @@ app.use('/mb-api/check-auth', mbApi);
 app.use('/mb-api/oauth/get-access-token', mbApi);
 app.use('/mb-api/oauth/get-access-token/refresh', mbApi);
 app.use('/mb-api/connected-vehicle-data', mbApi);
-
+app.use('/mb-api/connected-vehicle-data/vehicles', mbApi);
 
 
 // catch 404 and forward to error handler

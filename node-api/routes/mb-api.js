@@ -102,13 +102,11 @@ router.get('/oauth/get-access-token', function(req, res) {
 /**
  * Refresh TOKN
  */
-router.get('/obtaining-driver-consent/oauth/refresh', function(req, res) {
+//router.get('/oauth/get-access-token/refresh', function(req, res) {
+ function refreshToken(){
   console.log("\n*************************************************\n'")
-  console.log("callback calling '/obtaining-driver-consent/oauth/refresh'")
+  //console.log("callback calling '/oauth/get-access-token/refresh'")
 
-    const refresh_token = req.query.refresh_token;
-
-    console.log("response: authorization_code="+refresh_token);
 
     const clientID = process.env.mbClientID
     const clientSecret = process.env.mbClientSecret
@@ -122,7 +120,7 @@ router.get('/obtaining-driver-consent/oauth/refresh', function(req, res) {
       headers: {'content-type': 'application/x-www-form-urlencoded',  'Authorization': auth},
       form: {
         grant_type: 'refresh_token',
-        refresh_token: refresh_token
+        refresh_token: access_body.refresh_token
       }
     };
 
@@ -132,21 +130,10 @@ router.get('/obtaining-driver-consent/oauth/refresh', function(req, res) {
       const body = JSON.parse(response.body);
       access_body = body;
 
-      /*
-        {
-          "access_token":"d7e1f11d-f5a2-4973-8721-b8331cfeeaf0",
-          "token_type":"Bearer",
-          "expires_in":3600,
-          "refresh_token":"49a46180-c428-4465-b605-f654576c9810",
-          "scope":"mb:vehicle:status:general mb:user:pool:reader"
-         }
-*/
       console.log(response.body)
 
-      res.redirect(`/mb-api/connected-vehicle-data?access_token=${access_body.access_token}`);
-
     });
-});
+};
 
 
 router.get('/connected-vehicle-data',function(req,res,next){
@@ -164,7 +151,13 @@ router.get('/connected-vehicle-data',function(req,res,next){
   };
 
   request(options, function (error, response, parsedBody) {
-    const body = JSON.parse(response.body);
+    const body = JSON.parse(response.body)
+
+    if(response.statusCode === 401){
+      this.refreshToken();
+      res.redirect('/mb-api/connected-vehicle-data')
+    }
+
     console.log(response.body + " error: \n"+error)
     res.send(body)
 
@@ -173,5 +166,41 @@ router.get('/connected-vehicle-data',function(req,res,next){
   });
 
 });
+
+
+
+router.get('/connected-vehicle-data/vehicles',function(req,res,next){
+  console.log("calling '/connected-vehicle-data/vehicles'")
+
+
+  const id = res.req.query.id;
+  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v1/vehicles/'+id
+
+  var options = {
+    method: 'GET',
+    uri: api_endpoint,
+    headers: {
+      "Authorization":
+        "Bearer "+access_body.access_token,
+    }
+  };
+
+  request(options, function (error, response, parsedBody) {
+    const body = JSON.parse(response.body)
+
+    if(response.statusCode === 401){
+      this.refreshToken();
+      res.redirect('/mb-api/connected-vehicle-data')
+    }
+
+    console.log(response.body + " error: \n"+error)
+    res.send(body)
+
+    if (error) throw new Error(error);
+
+  });
+
+});
+
 
 module.exports=router;
