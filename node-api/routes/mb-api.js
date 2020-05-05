@@ -12,7 +12,7 @@ var access_body = ''
 router.get('/',function(req,res,next){
   console.log("calling '/'")
 
-    res.send("MB API is working properly");
+    res.send("MB Node is working properly");
 });
 
 

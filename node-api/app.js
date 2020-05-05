@@ -28,9 +28,15 @@ app.use('/users', usersRouter);
 
 /* OTONOMO */
 app.use('/otonomo-api', otonomoApi);
-app.use('/otonomo-api/obtaining-driver-consent', otonomoApi);
-app.use('/otonomo-api/obtaining-driver-consent/oauth/redirect', otonomoApi);
-app.use('/otonomo-api/personal-data', otonomoApi);
+app.use('/otonomo-api/personal/oauth', otonomoApi);
+app.use('/otonomo-api/personal/check-auth', otonomoApi);
+app.use('/otonomo-api/personal/oauth/get-access-token', otonomoApi);
+app.use('/otonomo-api/personal/personal-data', otonomoApi);
+
+app.use('/otonomo-api/aggregate/auth', otonomoApi);
+app.use('/otonomo-api/aggregate/historical-raw-data', otonomoApi);
+app.use('/otonomo-api/aggregate/report-status', otonomoApi);
+
 
 /* Mercedes-Benz */
 app.use('/mb-api', mbApi);
