@@ -83,7 +83,7 @@ class OtonomoApi extends React.Component{
     console.log("api call")
     fetch("http://localhost:9000/otonomo-api/aggregate/auth")
       .then(res => res.text())
-      .then(res => 
+      .then(res =>
 
         this.setState(
           {aggregateStatus: res}
@@ -97,7 +97,7 @@ class OtonomoApi extends React.Component{
   createAggregateData(){
     console.log("api call")
     fetch("http://localhost:9000/otonomo-api/aggregate/historical-raw-data")
-    .then(res => res.text())  
+    .then(res => res.text())
     .then(res => {
       console.log(res)
       var parsed = JSON.parse(res)

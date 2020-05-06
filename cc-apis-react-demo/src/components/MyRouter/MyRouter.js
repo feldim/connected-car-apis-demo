@@ -11,6 +11,7 @@ import {
 import MbApi from '../MbApi/MbApi';
 import Home from '../Home/Home';
 import OtonomoApi from '../OtonomoApi/OtonomoApi'
+import SmartcarApi from '../Smartcar/Smartcar'
 
 /* function isActive( pathname){
   return (useLocation().pathname === pathname);
@@ -23,6 +24,7 @@ const MyRouter = () => (
         <Link to="/">Home</Link>
         <Link to="/otonomo-api">Otonomo</Link>
         <Link to="/mb-api">Mercedes-Benz API</Link>
+        <Link to="/smartcar-api">smartcar API</Link>
     </nav>
 
     <hr />
@@ -43,6 +45,9 @@ const MyRouter = () => (
       </Route>
       <Route exact path="/otonomo-api">
         <OtonomoApi />
+      </Route>
+      <Route exact path="/smartcar-api">
+        <SmartcarApi />
       </Route>
     </Switch>
   </div>

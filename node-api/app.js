@@ -4,10 +4,10 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 otonomoApi = require("./routes/otonomo-api");
 mbApi = require("./routes/mb-api");
+smartcarApi = require("./routes/smartcar-api");
 
 var app = express();
 env = require('dotenv').config()
@@ -21,9 +21,6 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 
 /* OTONOMO */
@@ -47,6 +44,14 @@ app.use('/mb-api/oauth/get-access-token/refresh', mbApi);
 app.use('/mb-api/connected-vehicle-data', mbApi);
 app.use('/mb-api/connected-vehicle-data/vehicles', mbApi);
 
+
+/* smartcar */
+app.use('/smartcar-api', smartcarApi);
+app.use('/smartcar-api/oauth', smartcarApi);
+app.use('/smartcar-api/oauth/get-access-token', smartcarApi);
+//app.use('/mb-api/oauth/get-access-token/refresh', mbApi);
+app.use('/smartcar-api/vehicle-data', smartcarApi);
+//app.use('/smartcar-api/oauth/get-access-token', smartcarApi);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

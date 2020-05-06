@@ -39,6 +39,7 @@ class MbApi extends React.Component{
       urlParams.delete('state')
 
       this.callVehicleData()
+      this.callVehicleVinData();
 
     }else if(urlParams.has('code')){
     
@@ -75,21 +76,16 @@ class MbApi extends React.Component{
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    if(!urlParams.has('id')){
-      await fetch("http://localhost:9000/mb-api/connected-vehicle-data")
-        .then(res => res.text())
-        .then(res => {
+    await fetch("http://localhost:9000/mb-api/connected-vehicle-data")
+      .then(res => res.text())
+      .then(res => {
 
-          const body = JSON.parse(res);
-          this.setState({dataVehicle: res})
-
-          window.location.href = window.location.href + "?id="+body[0].id
-
-      });
-    }else{
-      this.callVehicleVinData();
-    }
-
+        const body = JSON.parse(res);
+        this.setState({dataVehicle: res})
+        if(!urlParams.has('id')){
+        window.location.href = window.location.href + "?id="+body[0].id
+      }
+    });
   }
 
   async callVehicleVinData(){
@@ -118,7 +114,7 @@ class MbApi extends React.Component{
   render(){
     return (
     <div className={styles.MbApi} data-testid="MbApi">
-      MbApi Component
+      <h1>MbApi Component</h1>
       <p>General Node Test:<br />{this.state.apiResponse}</p>
       <p>Connected Vehicle API: <br />{this.state.dataVehicle}</p>
       <p>Connected Vehicle API VIN data: <br />{this.state.dataVin}</p>

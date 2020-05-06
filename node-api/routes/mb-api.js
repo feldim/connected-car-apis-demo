@@ -1,9 +1,6 @@
 var express = require("express");
 var router = express.Router();
-// Import the axios library, to make HTTP requests
-const axios = require('axios')
 const request = require('request-promise')
-bodyParser = require('body-parser')
 
 
 const redirect_uri = 'http://localhost:3000/mb-api'
