@@ -42,7 +42,7 @@ class MbApi extends React.Component{
       this.callVehicleVinData();
 
     }else if(urlParams.has('code')){
-    
+
       var result = ''
       await fetch("http://localhost:9000/mb-api/oauth/get-access-token"+queryString)
         .then(res => res.text())

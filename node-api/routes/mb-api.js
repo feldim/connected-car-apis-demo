@@ -3,7 +3,7 @@ var router = express.Router();
 const request = require('request-promise')
 
 
-const redirect_uri = 'http://localhost:3000/mb-api'
+var redirect_uri = ''
 var access_body = ''
 
 router.get('/',function(req,res,next){
@@ -28,7 +28,7 @@ router.get('/check-auth', function(req, res) {
 router.get('/oauth', function(req, res) {
 
   console.log("calling '/oauth'")
-
+    redirect_uri = process.env.mbCallbackUri
     const clientID = process.env.mbClientID
     const autorize_url = 'https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize'
     const scope = 'mb:user:pool:reader+mb:vehicle:status:general'
@@ -96,42 +96,6 @@ router.get('/oauth/get-access-token', function(req, res) {
 });
 
 
-/**
- * Refresh TOKN
- */
-//router.get('/oauth/get-access-token/refresh', function(req, res) {
- function refreshToken(){
-  console.log("\n*************************************************\n'")
-  //console.log("callback calling '/oauth/get-access-token/refresh'")
-
-
-    const clientID = process.env.mbClientID
-    const clientSecret = process.env.mbClientSecret
-    const token_url = 'https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token'
-
-    const auth = 'Basic ' + Buffer.from(clientID+':'+clientSecret).toString('base64')
-
-    var options = {
-      method: 'POST',
-      uri: token_url,
-      headers: {'content-type': 'application/x-www-form-urlencoded',  'Authorization': auth},
-      form: {
-        grant_type: 'refresh_token',
-        refresh_token: access_body.refresh_token
-      }
-    };
-
-    request(options, function (error, response, parsedBody) {
-      if (error) throw new Error(error);
-
-      const body = JSON.parse(response.body);
-      access_body = body;
-
-      console.log(response.body)
-
-    });
-};
-
 
 router.get('/connected-vehicle-data',function(req,res,next){
   console.log("calling '/connected-vehicle-data'")
@@ -151,7 +115,7 @@ router.get('/connected-vehicle-data',function(req,res,next){
     const body = JSON.parse(response.body)
 
     if(response.statusCode === 401){
-      this.refreshToken();
+      //this.refreshToken();
       res.redirect('/mb-api/connected-vehicle-data')
     }
 
@@ -186,7 +150,7 @@ router.get('/connected-vehicle-data/vehicles',function(req,res,next){
     const body = JSON.parse(response.body)
 
     if(response.statusCode === 401){
-      this.refreshToken();
+      //this.refreshToken();
       res.redirect('/mb-api/connected-vehicle-data')
     }
 

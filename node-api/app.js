@@ -8,6 +8,7 @@ var cors = require('cors');
 otonomoApi = require("./routes/otonomo-api");
 mbApi = require("./routes/mb-api");
 smartcarApi = require("./routes/smartcar-api");
+hmApi = require("./routes/hm-api");
 
 var app = express();
 env = require('dotenv').config()
@@ -49,9 +50,23 @@ app.use('/mb-api/connected-vehicle-data/vehicles', mbApi);
 app.use('/smartcar-api', smartcarApi);
 app.use('/smartcar-api/oauth', smartcarApi);
 app.use('/smartcar-api/oauth/get-access-token', smartcarApi);
-//app.use('/mb-api/oauth/get-access-token/refresh', mbApi);
+//app.use('/smartcar-api/oauth/get-access-token/refresh', smartcarApi);
 app.use('/smartcar-api/vehicle-data', smartcarApi);
 //app.use('/smartcar-api/oauth/get-access-token', smartcarApi);
+
+
+/* High Mobility */
+app.use('/hm-api', hmApi);
+app.use('/hm-api/oauth', hmApi);
+app.use('/hm-api/oauth/get-access-token', hmApi);
+//app.use('/hm-api/oauth/get-access-token/refresh', hmApi);
+app.use('/hm-api/vehicle-data', hmApi);
+app.use('/hm-api/car-lock-state', hmApi);
+app.use('/hm-api/lock-car', hmApi);
+app.use('/hm-api/open-car', hmApi);
+
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

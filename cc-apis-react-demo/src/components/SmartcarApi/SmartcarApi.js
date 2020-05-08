@@ -1,13 +1,13 @@
 import React from 'react';
 //import PropTypes from 'prop-types';
-import styles from './Smartcar.module.scss';
+import styles from './SmartcarApi.module.scss';
 
 
 
 class Smartcar extends React.Component{
   constructor(props){
     super(props);
-    this.state={apiResponse:"", dataVehicle:"", lockData:""}; //set response with empty value
+    this.state={apiResponse:"", dataVehicle:"", lockData:"",disconnectState:""}; //set response with empty value
     this.lockCar = this.lockCar.bind(this);
     this.unlockCar = this.unlockCar.bind(this);
   }
@@ -21,7 +21,7 @@ class Smartcar extends React.Component{
 
 
   async authenticateAPI(){
-    console.log("Smartcar : authenticateAPI");
+    console.log("Smartcar: authenticateAPI");
 
     const queryString = window.location.search;
     console.log("query String: " + queryString);
@@ -112,6 +112,18 @@ class Smartcar extends React.Component{
       });
   }
 
+
+  disconnect(){
+    console.log("Smartcar: disconnect")
+
+    fetch("http://localhost:9000/smartcar-api/disconnect")
+        .then(res => res.text())
+        .then(res => {
+          const body = JSON.parse(res);
+          this.setState({disconnectState: body})
+      });
+  }
+
   componentDidMount(){
     this.callAPI();
     this.authenticateAPI()
@@ -125,15 +137,39 @@ class Smartcar extends React.Component{
       { this.state.dataVehicle ?
             <div>
               <h2>Connected Vehicle:</h2>
-              ID: {this.state.dataVehicle.id}<br />
-              Make: {this.state.dataVehicle.make}<br />
-              Model: {this.state.dataVehicle.model}<br />
-              Model: {this.state.dataVehicle.year}<br />
-              Control: <button onClick={this.lockCar}>Lock Car</button><button onClick={this.unlockCar}>Unlock Car</button><br />
+              ID: {this.state.dataVehicle[0].id}<br />
+              Make: {this.state.dataVehicle[0].make}<br />
+              Model: {this.state.dataVehicle[0].model}<br />
+              Year: {this.state.dataVehicle[0].year}<br />
+              <hr />
+              Permissions: {JSON.stringify(this.state.dataVehicle[1])}<br />
+              <hr />
+              Location: {JSON.stringify(this.state.dataVehicle[2])}<br />
+              <hr />
+              Odometer: {JSON.stringify(this.state.dataVehicle[3].data.distance)}<br />
+              <hr />
+              Oil: {JSON.stringify(this.state.dataVehicle[4])}<br />
+              <hr />
+              Tire Pressures: {JSON.stringify(this.state.dataVehicle[5])}<br />
+              <hr />
+              Fuel: {JSON.stringify(this.state.dataVehicle[6])}<br />
+              <hr />
+              Battery: {JSON.stringify(this.state.dataVehicle[7])}<br />
+              <hr />
+              Charge: {JSON.stringify(this.state.dataVehicle[8])}<br />
+              <hr />
+              VIN: {JSON.stringify(this.state.dataVehicle[9])}<br />
+              <h3>Control: </h3>
+              <button onClick={this.lockCar}>Lock Car</button><button onClick={this.unlockCar}>Unlock Car</button><br />
               { this.state.lockData ?
                 <p>{this.state.lockData.status}</p>
                 : <p>n.a.</p>
-            }
+              }
+              <button onClick={this.disconnect}>Disconnect Car</button>
+              { this.state.disconnectState ?
+                <p>{this.state.disconnectState.status}</p>
+                : <p>n.a.</p>
+              }
             </div>
             : null
          }

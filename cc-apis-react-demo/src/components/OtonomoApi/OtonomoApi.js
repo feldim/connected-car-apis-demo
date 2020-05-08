@@ -132,7 +132,6 @@ class OtonomoApi extends React.Component{
         <p>General Test:<br />{this.state.apiResponse}</p>
         <p>Personal Data Test: <br />{this.state.simulationData.replace(/,/g,'\n,')}</p>
         <hr />
-        
         <h1>Aggregated Data:</h1>
         <p> Aggregated Data Auth Status: {this.state.aggregateStatus}</p>
           <p>Create Aggregated Data Report: <button onClick={this.createAggregateData}>Start Report</button></p>

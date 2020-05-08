@@ -32,7 +32,11 @@ router.get('/oauth', function(req, res) {
       clientId: process.env.smartcarClientID,
       clientSecret: process.env.smartcarClientSecret,
       redirectUri: redirect_uri,
-      scope: ['read_vehicle_info', 'control_security'],
+      scope: [
+        'read_odometer','read_vehicle_info', 'control_security','read_engine_oil',
+        'read_battery','read_charge', 'read_fuel','read_location',
+        'read_tires','read_vin'
+    ],
       testMode: true, // launch Smartcar Connect in test mode
     });
 
@@ -68,29 +72,126 @@ router.get('/oauth/get-access-token', function(req, res, next) {
 })
 
 
-router.get('/vehicle-data',function(req,res,next){
-    console.log("calling '/vehicle-data'")
+router.get('/vehicle-data',async function(req,res,next){
+  console.log("calling '/vehicle-data'")
 
-    // get the user's vehicles
-    smartcar.getVehicleIds(access_body.accessToken)
-    .then(function(res) {
-        // instantiate first vehicle in vehicle list
-        const vehicle = new smartcar.Vehicle(res.vehicles[0], access_body.accessToken);
-        // get identifying information about a vehicle
-        return vehicle.info();
-      })
+  var vehicle;
+  var returnData = [];
+  // get the user's vehicles
+
+  await smartcar.getVehicleIds(access_body.accessToken)
+  .then(function(res) {
+      // instantiate first vehicle in vehicle list
+      vehicle = new smartcar.Vehicle(res.vehicles[0], access_body.accessToken);
+      // get identifying information about a vehicle
+      return vehicle.info();
+    })
+  .then(function(data) {
+    console.log(data);
+    returnData.push(data);
+  })
+
+  try{
+    await vehicle.permissions()
       .then(function(data) {
         console.log(data);
-        // {
-        //   "id": "36ab27d0-fd9d-4455-823a-ce30af709ffc",
-        //   "make": "TESLA",
-        //   "model": "Model S",
-        //   "year": 2014
-        // }
-    
-        // json response will be sent to the user
-        res.json(data);
-      });
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.location()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.odometer()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.oil()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.tirePressure()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.fuel()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.battery()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.charge()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+  try{
+    await vehicle.vin()
+      .then(function(data) {
+        console.log(data);
+        returnData.push(data);
+      })
+  }catch(error){
+      console.log(error);
+      returnData.push(error);
+  }
+
+
+  res.json(returnData);
 })
 
 router.get('/lock-car',function(req,res,next){
@@ -125,5 +226,22 @@ router.get('/unlock-car',function(req,res,next){
         res.json(data);
       });
 })
+
+router.get('/disconnect',function(req,res,next){
+  console.log("calling '/disconnect'")
+
+  // get the user's vehicles
+  smartcar.getVehicleIds(access_body.accessToken)
+  .then(function(res) {
+      // instantiate first vehicle in vehicle list
+      const vehicle = new smartcar.Vehicle(res.vehicles[0], access_body.accessToken);
+      return vehicle.disconnect()
+    })
+    .then(function(data) {
+      console.log(data);
+      res.json(data);
+    });
+})
+
 module.exports=router;
 
