@@ -22,6 +22,11 @@ class HighMobilityApi extends React.Component{
   async authenticateAPI(){
     console.log("High Mobility: authenticateAPI");
 
+    const queryString = window.location.search;
+    console.log("query String: " + queryString);
+
+    const urlParams = new URLSearchParams(queryString);
+
     var auth = false;
     //check for auth
     await fetch("http://localhost:9000/hm-api/check-auth")
@@ -34,18 +39,35 @@ class HighMobilityApi extends React.Component{
     if(auth){
 
       console.log("already authenticated");
+      this.callVehicleData();
+      this.getCarLockState();
 
-    }else{
+    }else if(urlParams.has('code')){
+
       var result = ''
-      await fetch("http://localhost:9000/hm-api/oauth/get-access-token")
-      .then(res => res.text())
-      .then(res => (
-        result = JSON.parse(res)
-      ));
+      await fetch("http://localhost:9000/hm-api/oauth/get-access-token"+queryString)
+        .then(res => res.text())
+        .then(res => (
+          result = JSON.parse(res)
+        ));
 
-      if(result.accessGainingPublicKey){
-        auth = true
-      }
+        if(result.status === 'appoved'){
+          auth = true
+          window.location.href = window.location.href.split('?')[0]
+
+        }
+    }else{
+
+      console.log("authenticate")
+      var loginUrl = "";
+
+      await fetch("http://localhost:9000/hm-api/oauth/")
+        .then(res => res.text())
+        .then(res => (
+            loginUrl = res
+          ));
+
+      window.location.href = loginUrl;
     }
   }
 
@@ -134,8 +156,7 @@ class HighMobilityApi extends React.Component{
   async componentDidMount(){
     this.callAPI();
     await this.authenticateAPI();
-    this.callVehicleData();
-    this.getCarLockState();
+
   }
 
 
@@ -157,10 +178,25 @@ class HighMobilityApi extends React.Component{
               <h2>Control:</h2>
               Lock Status:<br />
               {Object.entries(this.state.lockStatus).map(([key,value])=>{
-                return (<div>{key} : {Object.entries(value).map(([key,value])=>{
-                  return (<div>{key} : {JSON.stringify(value)}</div>);
-                })}</div>);
-              })}
+                return (
+                <div>{key} : {Object.entries(value).map(([key,value])=>{
+                  return (
+                  <div>{key} :
+                  {'key' in value?
+                   <div>
+                      {Object.entries(value).map(([key,value])=>{
+                          return (<div>{key}: {JSON.stringify(value)}</div>);
+                       })}
+                    </div>
+                    :
+                      <div>{JSON.stringify(value)}</div>
+                    }
+                  </div>
+                  );
+                  })}
+                </div>
+                );
+                })}
               <p>
                 <button onClick={this.lockCar}>Lock Car</button><br />
               <button onClick={this.unlockCar}>Unlock Car</button>

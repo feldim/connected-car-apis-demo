@@ -26,7 +26,7 @@ const MyRouter = () => (
         <Link to="/otonomo-api">Otonomo</Link>
         <Link to="/mb-api">Mercedes-Benz</Link>
         <Link to="/smartcar-api">smartcar</Link>
-        <Link to="/highmobility-api">High Mobility</Link>
+        <Link to="/hm-api">High Mobility</Link>
     </nav>
 
     <hr />
@@ -51,7 +51,7 @@ const MyRouter = () => (
       <Route exact path="/smartcar-api">
         <SmartcarApi />
       </Route>
-      <Route exact path="/highmobility-api">
+      <Route exact path="/hm-api">
         <HighMobilityApi />
       </Route>
     </Switch>

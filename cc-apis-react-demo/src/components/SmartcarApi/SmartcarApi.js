@@ -10,6 +10,7 @@ class Smartcar extends React.Component{
     this.state={apiResponse:"", dataVehicle:"", lockData:"",disconnectState:""}; //set response with empty value
     this.lockCar = this.lockCar.bind(this);
     this.unlockCar = this.unlockCar.bind(this);
+    this.disconnect = this.disconnect.bind(this);
   }
 
   callAPI(){

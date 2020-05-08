@@ -35,8 +35,6 @@ class MbApi extends React.Component{
 
     if(auth){
       console.log("already authenticated");
-      urlParams.delete('code');
-      urlParams.delete('state')
 
       this.callVehicleData()
       this.callVehicleVinData();
