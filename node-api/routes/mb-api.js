@@ -1,7 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const request = require('request-promise')
-
+const axios = require('axios');
 
 var redirect_uri = ''
 var access_body = ''
@@ -113,12 +113,6 @@ router.get('/connected-vehicle-data',function(req,res,next){
 
   request(options, function (error, response, parsedBody) {
     const body = JSON.parse(response.body)
-
-    if(response.statusCode === 401){
-      //this.refreshToken();
-      res.redirect('/mb-api/connected-vehicle-data')
-    }
-
     console.log(response.body + " error: \n"+error)
     res.send(body)
 
@@ -148,12 +142,6 @@ router.get('/connected-vehicle-data/vehicles',function(req,res,next){
 
   request(options, function (error, response, parsedBody) {
     const body = JSON.parse(response.body)
-
-    if(response.statusCode === 401){
-      //this.refreshToken();
-      res.redirect('/mb-api/connected-vehicle-data')
-    }
-
     console.log(response.body + " error: \n"+error)
     res.send(body)
 
@@ -163,5 +151,54 @@ router.get('/connected-vehicle-data/vehicles',function(req,res,next){
 
 });
 
+
+
+
+router.get('/doors',function(req,res,next){
+  console.log("calling '/doors'")
+
+
+  const id = res.req.query.id;
+  const cmd = res.req.query.cmd;
+  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v1/vehicles/'+id+'/doors'
+
+
+  var options;
+  if(cmd){
+    return axios
+    .post(
+      api_endpoint,
+      {
+      command:cmd
+      },
+      {
+        headers: { Authorization: "Bearer "+access_body.access_token }
+      })
+      .then(async (response) => {
+        console.log(response)
+        res.send(response.data)
+      })
+      .catch(err => {
+        console.log(err)
+      });
+  }else{
+
+    return axios
+    .get(
+      api_endpoint,
+      {
+        headers: { Authorization: "Bearer "+access_body.access_token }
+      })
+      .then(async (response) => {
+        console.log(response)
+        res.send(response.data)
+      })
+      .catch(err => {
+        console.log(err)
+        res.send(err)
+      });
+  }
+
+});
 
 module.exports=router;

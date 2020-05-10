@@ -44,7 +44,7 @@ app.use('/mb-api/oauth/get-access-token', mbApi);
 app.use('/mb-api/oauth/get-access-token/refresh', mbApi);
 app.use('/mb-api/connected-vehicle-data', mbApi);
 app.use('/mb-api/connected-vehicle-data/vehicles', mbApi);
-
+app.use('/mb-api/doors', mbApi);
 
 /* smartcar */
 app.use('/smartcar-api', smartcarApi);

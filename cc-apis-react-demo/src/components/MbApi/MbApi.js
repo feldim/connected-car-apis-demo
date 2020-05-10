@@ -5,8 +5,11 @@ import styles from './MbApi.module.scss';
 class MbApi extends React.Component{
   constructor(props){
     super(props);
-    this.state={apiResponse:"", dataVehicle:"", dataVin:""}; //set response with empty value
-
+    this.state={apiResponse:"", dataVehicle:"", dataVin:"",lockstate:""}; //set response with empty value
+    this.lockCar = this.lockCar.bind(this);
+    this.unlockCar = this.unlockCar.bind(this);
+    this.callVehicleVinData = this.callVehicleVinData.bind(this);
+    this.getDoorState = this.callDoorState.bind(this);
   }
 
   callAPI(){
@@ -36,8 +39,9 @@ class MbApi extends React.Component{
     if(auth){
       console.log("already authenticated");
 
-      this.callVehicleData()
-      this.callVehicleVinData();
+      await this.callVehicleData()
+      await this.callVehicleVinData();
+      await this.callDoorState();
 
     }else if(urlParams.has('code')){
 
@@ -103,9 +107,60 @@ class MbApi extends React.Component{
 
   }
 
-  componentDidMount(){
+  async lockCar(){
+    console.log("MB: call lock")
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+      await fetch("http://localhost:9000/mb-api/doors?id="+urlParams.get('id')+'&cmd=LOCK')
+        .then(res => res.text())
+        .then(res => {
+
+          this.setState({lockstate: res})
+
+      });
+
+      this.callDoorState();
+
+  }
+
+  async unlockCar(){
+    console.log("MB: call unlock")
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    await fetch("http://localhost:9000/mb-api/doors?id="+urlParams.get('id')+'&cmd=UNLOCK')
+    .then(res => res.text())
+    .then(res => {
+
+    this.setState({lockstate: res})
+
+  });
+
+
+  this.callDoorState();
+  }
+
+  async callDoorState(){
+    console.log("MB: call doorState")
+
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+
+    var returnData;
+    await fetch("http://localhost:9000/mb-api/doors?id="+urlParams.get('id'))
+    .then(res => res.text())
+    .then(res => {
+      returnData = res;
+    });
+    this.setState({lockstate: returnData})
+  }
+
+  async componentDidMount(){
     this.callAPI();
-    this.authenticateAPI()
+    await this.authenticateAPI()
   }
 
 
@@ -113,10 +168,18 @@ class MbApi extends React.Component{
     return (
     <div className={styles.MbApi} data-testid="MbApi">
       <h1>MbApi Component</h1>
-      <p>General Node Test:<br />{this.state.apiResponse}</p>
+      <h2>General Node Test:</h2><p>{this.state.apiResponse}</p>
       <p>Connected Vehicle API: <br />{this.state.dataVehicle}</p>
       <p>Connected Vehicle API VIN data: <br />{this.state.dataVin}</p>
+      <h2>Controls:</h2>
+      <p>
+        Lock State: <br />
+        <button onClick={this.callDoorState}>refresh</button><br />
+        {this.state.lockstate}<br />
+        <button onClick={this.lockCar}>Lock Car</button> <button onClick={this.unlockCar}>Unlock Car</button>
+      </p>
     </div>
+
   );
     }
 }

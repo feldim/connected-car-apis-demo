@@ -2,12 +2,10 @@ import React from 'react';
 //import PropTypes from 'prop-types';
 import styles from './SmartcarApi.module.scss';
 
-
-
 class Smartcar extends React.Component{
   constructor(props){
     super(props);
-    this.state={apiResponse:"", dataVehicle:"", lockData:"",disconnectState:""}; //set response with empty value
+    this.state={apiResponse:"", dataVehicle:"", lockData:"",disconnectState:"", isLoading:false}; //set response with empty value
     this.lockCar = this.lockCar.bind(this);
     this.unlockCar = this.unlockCar.bind(this);
     this.disconnect = this.disconnect.bind(this);
@@ -77,7 +75,7 @@ class Smartcar extends React.Component{
 
   async callVehicleData(){
     console.log("Smartcar: call vehicle data")
-
+    this.setState({isLoading:true})
     await fetch("http://localhost:9000/smartcar-api/vehicle-data")
         .then(res => res.text())
         .then(res => {
@@ -86,6 +84,7 @@ class Smartcar extends React.Component{
           this.setState({dataVehicle: body})
 
       });
+      this.setState({isLoading:false})
   }
 
 

@@ -198,7 +198,7 @@ class HighMobilityApi extends React.Component{
                 );
                 })}
               <p>
-                <button onClick={this.lockCar}>Lock Car</button><br />
+              <button onClick={this.lockCar}>Lock Car</button><br />
               <button onClick={this.unlockCar}>Unlock Car</button>
               </p>
 
