@@ -9,7 +9,7 @@ class MbApi extends React.Component{
     this.lockCar = this.lockCar.bind(this);
     this.unlockCar = this.unlockCar.bind(this);
     this.callVehicleVinData = this.callVehicleVinData.bind(this);
-    this.getDoorState = this.callDoorState.bind(this);
+    this.callDoorState = this.callDoorState.bind(this);
   }
 
   callAPI(){
@@ -83,10 +83,10 @@ class MbApi extends React.Component{
       .then(res => {
 
         const body = JSON.parse(res);
-        this.setState({dataVehicle: res})
         if(!urlParams.has('id')){
-        window.location.href = window.location.href + "?id="+body[0].id
-      }
+          window.location.href = window.location.href + "?id="+body[0].id
+        }
+        this.setState({dataVehicle: res})
     });
   }
 
@@ -96,15 +96,19 @@ class MbApi extends React.Component{
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-
-      await fetch("http://localhost:9000/mb-api/connected-vehicle-data/vehicles?id="+urlParams.get('id'))
+    const id = urlParams.get('id')
+    if(id){
+      await fetch("http://localhost:9000/mb-api/connected-vehicle-data/vehicles?id="+id)
         .then(res => res.text())
         .then(res => {
 
           this.setState({dataVin: res})
 
       });
-
+    }else{
+      console.log("id was undefined: refused to call vehicle vin information")
+      this.setState({dataVin: ''})
+    }
   }
 
   async lockCar(){
@@ -116,13 +120,10 @@ class MbApi extends React.Component{
       await fetch("http://localhost:9000/mb-api/doors?id="+urlParams.get('id')+'&cmd=LOCK')
         .then(res => res.text())
         .then(res => {
-
-          this.setState({lockstate: res})
+          console.log(res)
+          this.setState({lockstate: JSON.parse(res).data})
 
       });
-
-      this.callDoorState();
-
   }
 
   async unlockCar(){
@@ -137,10 +138,7 @@ class MbApi extends React.Component{
 
     this.setState({lockstate: res})
 
-  });
-
-
-  this.callDoorState();
+    });
   }
 
   async callDoorState(){
@@ -149,13 +147,12 @@ class MbApi extends React.Component{
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
 
-    var returnData;
     await fetch("http://localhost:9000/mb-api/doors?id="+urlParams.get('id'))
     .then(res => res.text())
     .then(res => {
-      returnData = res;
+      this.setState({lockstate: res})
     });
-    this.setState({lockstate: returnData})
+
   }
 
   async componentDidMount(){

@@ -1,10 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const smartcar = require('smartcar');
-const request = require('request-promise')
 
-
-const port = 4000;
 var access_body = '';
 var redirect_uri=''
 var client;

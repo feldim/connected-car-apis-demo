@@ -179,21 +179,25 @@ class HighMobilityApi extends React.Component{
               Lock Status:<br />
               {Object.entries(this.state.lockStatus).map(([key,value])=>{
                 return (
-                <div>{key} : {Object.entries(value).map(([key,value])=>{
-                  return (
-                  <div>{key} :
-                  {'key' in value?
-                   <div>
-                      {Object.entries(value).map(([key,value])=>{
-                          return (<div>{key}: {JSON.stringify(value)}</div>);
-                       })}
+                <div>{key} : { 
+                  value.keys ? 
+                    Object.entries(value).map(([key,value])=>{
+                    return (
+                    <div>{key} :
+                    {'key' in value?
+                    <div>
+                        {Object.entries(value).map(([key,value])=>{
+                            return (<div>{key}: {JSON.stringify(value)}</div>);
+                        })}
+                      </div>
+                      :
+                        <div>{JSON.stringify(value)}</div>
+                      }
                     </div>
-                    :
-                      <div>{JSON.stringify(value)}</div>
-                    }
-                  </div>
-                  );
-                  })}
+                    );
+                    })
+                  : <b>{value}</b>
+                  }
                 </div>
                 );
                 })}
