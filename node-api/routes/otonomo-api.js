@@ -95,9 +95,8 @@ router.get('/personal/personal-data', function(req, res) {
     };
 
     request(options, function (error, response, body) {
-    
-      console.log(body);
-
+      if (error) throw new Error(error);
+      console.log(response);
       res.send(body)
 
     });
@@ -107,11 +106,11 @@ router.get('/personal/personal-data', function(req, res) {
 
 /***
  * ******************************************
- * 
- * 
+ *
+ *
  * AGGREGATE - DATA
- * 
- * 
+ *
+ *
  * ******************************************
  */
 
@@ -132,11 +131,10 @@ router.get('/aggregate/auth', function(req, res) {
   };
 
   request(options, function (error, response) {
-   
-
-    const body = JSON.parse(response.body);
+    if (error) throw new Error(error);
+       const body = JSON.parse(response.body);
       access_body_aggregate = body;
-      console.log(response.body)
+      console.log(response)
       res.send(response.statusCode)
   });
 
@@ -145,7 +143,6 @@ router.get('/aggregate/auth', function(req, res) {
 
 router.get('/aggregate/historical-raw-data', function(req, res) {
 
-  
   const start_datetime = "2019-01-19 00:00:00" //res.req.query.end
   const end_datetime = "2019-01-20 00:00:00"
 
@@ -161,7 +158,8 @@ router.get('/aggregate/historical-raw-data', function(req, res) {
   };
 
   request(options, function (error, response) {
-
+    if (error) throw new Error(error);
+    console.log(response)
     res.send(response)
   });
 
@@ -183,7 +181,7 @@ router.get('/aggregate/report-status', function(req, res) {
 
   request(options, function (error, response) {
     if (error) throw new Error(error);
-
+      console.log(response)
       res.send(response)
   });
 
