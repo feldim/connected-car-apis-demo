@@ -53,7 +53,7 @@ router.get('/personal/oauth/get-access-token', function(req, res) {
 
 
     var url = `${token_url}?grant_type=authorization_code&code=${code}&redirect_uri=${redirect_uri}&client_id=${clientID}&client_secret=${clientSecret}`;
-   
+
     console.log("url: "+url);
     // The req.query object has the query params that
     // were sent to this route. We want the `code` param
@@ -84,8 +84,7 @@ router.get('/personal/oauth/get-access-token', function(req, res) {
 
 router.get('/personal/personal-data', function(req, res) {
 
-    // this should normally come from /obtaining-driver-consent/oauth/redirect
-    const bearer = process.env.otonomoBearer
+    const bearer = process.env.otonomoBearer //this is extracted from the playground's simulation
     const url = 'https://market.otonomo.io/cars/v1/status/'
 
     var options = {
@@ -100,8 +99,6 @@ router.get('/personal/personal-data', function(req, res) {
       res.send(body)
 
     });
-
-
 });
 
 /***
@@ -143,7 +140,7 @@ router.get('/aggregate/auth', function(req, res) {
 
 router.get('/aggregate/historical-raw-data', function(req, res) {
 
-  const start_datetime = "2019-01-19 00:00:00" //res.req.query.end
+  const start_datetime = "2019-01-19 00:00:00"
   const end_datetime = "2019-01-20 00:00:00"
 
   var options = {
@@ -154,7 +151,6 @@ router.get('/aggregate/historical-raw-data', function(req, res) {
       'Content-Type': ['application/json', 'application/json']
     },
     body: JSON.stringify({"start_datetime":start_datetime,"end_datetime":end_datetime})
-  
   };
 
   request(options, function (error, response) {

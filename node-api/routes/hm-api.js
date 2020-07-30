@@ -45,7 +45,6 @@ router.get('/oauth', function(req, res) {
     console.log("url: "+url);
     res.send(url)
 
-
   });
 
 
@@ -92,9 +91,9 @@ router.get('/open-car',async function(req,res,next){
     try {
         const response = await hmkit.telematics.sendCommand(
           hmkit.commands.Doors.lockUnlockDoors({ locksState: 'unlocked' }), // command helper function
-          accessCertificate // access certificate
+          accessCertificate  // access certificate
         )
-        console.log('object:', response.parse()) 
+        console.log('object:', response.parse())
         res.send(response.parse())
 
       } catch (error) {

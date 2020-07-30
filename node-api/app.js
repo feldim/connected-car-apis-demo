@@ -34,7 +34,7 @@ app.use('/otonomo-api/personal/personal-data', otonomoApi);
 app.use('/otonomo-api/aggregate/auth', otonomoApi);
 app.use('/otonomo-api/aggregate/historical-raw-data', otonomoApi);
 app.use('/otonomo-api/aggregate/report-status', otonomoApi);
-
+app.use('/otonomo-api/accesstest', otonomoApi);
 
 /* Mercedes-Benz */
 app.use('/mb-api', mbApi);

@@ -23,6 +23,8 @@ router.get('/check-auth', function(req, res) {
 
 // Redirect to Smartcar Connect
 router.get('/oauth', function(req, res) {
+
+    // Redirect to Smartcar Connect
     redirect_uri = process.env.smartcarCallbackUri
 
     client = new smartcar.AuthClient({
@@ -44,14 +46,14 @@ router.get('/oauth', function(req, res) {
     res.send(url)
   });
 
-  /**
- *  Handle Smartcar callback with auth code
- */
+
 router.get('/oauth/get-access-token', function(req, res, next) {
     console.log("\n*************************************************\n'")
     console.log("callback calling '/oauth/get-access-token'")
 
-    //let access;
+      /**
+     *  Handle Smartcar callback with auth code
+     */
 
     if (req.query.error) {
       // the user denied your requested permissions
