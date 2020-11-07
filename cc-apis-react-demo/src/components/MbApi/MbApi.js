@@ -83,7 +83,7 @@ class MbApi extends React.Component{
       .then(res => {
 
         const body = JSON.parse(res);
-        if(!urlParams.has('id')){
+        if(!urlParams.has('id') && body){
           window.location.href = window.location.href + "?id="+body[0].id
         }
         this.setState({dataVehicle: res})
