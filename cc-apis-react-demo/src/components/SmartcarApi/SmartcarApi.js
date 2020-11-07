@@ -1,8 +1,5 @@
 import React from 'react';
-//import PropTypes from 'prop-types';
 import styles from './SmartcarApi.module.scss';
-import Lottie from 'react-lottie';
-import animationData from './../../lotties/8959-car-revolving-animation.json';
 
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
@@ -137,15 +134,6 @@ class Smartcar extends React.Component{
 
   render(){
 
-    const defaultOptions = {
-      loop: true,
-      autoplay: true,
-      animationData: animationData,
-      rendererSettings: {
-        preserveAspectRatio: "xMidYMid slice"
-      }
-    };
-
   return (
     <div className={styles.Smartcar} data-testid="Smartcar">
       <h1>Smartcar Component</h1>
@@ -187,23 +175,25 @@ class Smartcar extends React.Component{
                 : <p>n.a.</p>
               }
             </div>
-            :     
+            :     null
+         }
+
+          {this.state.apiResponse ? 
             <React.Fragment>
             <h3>Please wait . . .</h3>
             <div>
             <Player
               autoplay
               loop
-              src="https://assets3.lottiefiles.com/packages/lf20_UJNc2t.json"
-              style={{ height: '300px', width: '300px' }}
+              src="https://assets6.lottiefiles.com/packages/lf20_gv7Ovi.json"
+              style={{ height: '500px', width: '500px' }}
             >
-              <Controls visible={true} buttons={['play', 'repeat', 'frame', 'debug']} />
+              <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
             </Player>
             </div>
             </React.Fragment>
-         }
 
-
+      : <h3>Backend is offline . . . :(</h3>}
     </div>
   );
 
