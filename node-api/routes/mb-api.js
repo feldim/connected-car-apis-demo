@@ -30,11 +30,11 @@ router.get('/oauth', function(req, res) {
   console.log("calling '/oauth'")
     redirect_uri = process.env.mbCallbackUri
     const clientID = process.env.mbClientID
-    const autorize_url = 'https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/authorize'
+    const autorize_url = 'https://id.mercedes-benz.com/as/authorization.oauth2'
     const scope = 'mb:user:pool:reader+mb:vehicle:status:general'
     const state = 'test'
 
-    var url = `${autorize_url}?response_type=code&client_id=${clientID}&redirect_uri=${redirect_uri}&scope=${scope}&prompt=login,consent&state=${state}`;
+    var url = `${autorize_url}?response_type=code&client_id=${clientID}&redirect_uri=${redirect_uri}&scope=${scope}&prompt=login+consent&state=${state}`;
 
     console.log("url: "+url);
     res.send(url)
@@ -57,7 +57,7 @@ router.get('/oauth/get-access-token', function(req, res) {
 
     const clientID = process.env.mbClientID
     const clientSecret = process.env.mbClientSecret
-    const token_url = 'https://api.secure.mercedes-benz.com/oidc10/auth/oauth/v2/token'
+    const token_url = 'https://id.mercedes-benz.com/as/token.oauth2'
 
     const auth = 'Basic ' + Buffer.from(clientID+':'+clientSecret).toString('base64')
 
@@ -77,16 +77,6 @@ router.get('/oauth/get-access-token', function(req, res) {
 
       const body = JSON.parse(response.body);
       access_body = body;
-
-      /*
-        {
-          "access_token":"d7e1f11d-f5a2-4973-8721-b8331cfeeaf0",
-          "token_type":"Bearer",
-          "expires_in":3600,
-          "refresh_token":"49a46180-c428-4465-b605-f654576c9810",
-          "scope":"mb:vehicle:status:general mb:user:pool:reader"
-         }
-*/
       console.log(response.body)
 
       res.send(response)
@@ -100,27 +90,29 @@ router.get('/oauth/get-access-token', function(req, res) {
 router.get('/connected-vehicle-data',function(req,res,next){
   console.log("calling '/connected-vehicle-data'")
 
-  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v1/vehicles'
+  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v2/vehicles'
 
-  var options = {
-    method: 'GET',
-    uri: api_endpoint,
-    headers: {
-      "Authorization":
-        "Bearer "+access_body.access_token,
-    }
-  };
+  const options = {
+    method: 'get',
+    url: api_endpoint,
+    headers: {Authorization:  'Bearer '+access_body.access_token },
+}
 
-  request(options, function (error, response, parsedBody) {
+  // send the request
+  axios(options).then(response => {
     const body = JSON.parse(response.body)
     console.log(response.body + " error: \n"+error)
     res.send(body)
 
-    if (error) throw new Error(error);
-
+  })
+  .catch((response) => {
+    console.log('error ' + response);
+    throw new Error(response)
   });
 
 });
+
+
 
 
 
@@ -129,7 +121,7 @@ router.get('/connected-vehicle-data/vehicles',function(req,res,next){
 
 
   const id = res.req.query.id;
-  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v1/vehicles/'+id
+  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v2/vehicles/'+id
 
   var options = {
     method: 'GET',
@@ -160,7 +152,7 @@ router.get('/doors',function(req,res,next){
 
   const id = res.req.query.id;
   const cmd = res.req.query.cmd;
-  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v1/vehicles/'+id+'/doors'
+  const api_endpoint = 'https://api.mercedes-benz.com/experimental/connectedvehicle/v2/vehicles/'+id+'/doors'
 
 
   var options;
